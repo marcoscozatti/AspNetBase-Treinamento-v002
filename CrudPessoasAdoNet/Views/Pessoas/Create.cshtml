@@ -1,0 +1,58 @@
+@*
+    =====================================================================
+    VIEW — Create: formulário para CADASTRAR uma nova pessoa (o "C" de Create)
+    ---------------------------------------------------------------------
+    Ao clicar em "Salvar", o formulário envia (POST) os dados para
+    PessoasController.Create(Pessoa pessoa).
+    =====================================================================
+*@
+
+@* Esta View trabalha com UMA pessoa (não uma lista). *@
+@model CrudPessoasAdoNet.Models.Pessoa
+
+@{
+    ViewData["Title"] = "Nova Pessoa";
+}
+
+<h1>Nova Pessoa</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        @* asp-action="Create" + method="post" -> envia para POST /Pessoas/Create.
+           O Tag Helper <form> também inclui automaticamente o token
+           anti-falsificação exigido pelo [ValidateAntiForgeryToken]. *@
+        <form asp-action="Create" method="post">
+
+            @* Resumo de erros que não pertencem a um campo específico. *@
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                @* asp-for liga o campo à propriedade do Model:
+                   - <label> mostra o [Display(Name)]
+                   - <input> recebe name="Nome" e as regras de validação
+                   - <span asp-validation-for> exibe a mensagem de erro *@
+                <label asp-for="Nome" class="form-label"></label>
+                <input asp-for="Nome" class="form-control" placeholder="Digite o nome" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Idade" class="form-label"></label>
+                @* Como Idade é "int", o Tag Helper gera type="number" sozinho. *@
+                <input asp-for="Idade" class="form-control" />
+                <span asp-validation-for="Idade" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-success">Salvar</button>
+            <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+        </form>
+    </div>
+</div>
+
+@* A seção "Scripts" é renderizada no final do _Layout.
+   O partial _ValidationScriptsPartial ativa a VALIDAÇÃO NO NAVEGADOR
+   (jQuery Validation), mostrando erros antes mesmo de enviar ao servidor. *@
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

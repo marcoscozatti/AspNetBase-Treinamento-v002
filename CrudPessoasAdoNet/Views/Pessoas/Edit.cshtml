@@ -1,0 +1,50 @@
+@*
+    =====================================================================
+    VIEW — Edit: formulário para ALTERAR uma pessoa (o "U" de Update)
+    ---------------------------------------------------------------------
+    O Controller (GET Edit) envia a pessoa já carregada do banco,
+    então os campos aparecem PREENCHIDOS. Ao salvar, os dados vão
+    para POST /Pessoas/Edit/{id}.
+    =====================================================================
+*@
+
+@model CrudPessoasAdoNet.Models.Pessoa
+
+@{
+    ViewData["Title"] = "Editar Pessoa";
+}
+
+<h1>Editar Pessoa</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            @* CAMPO OCULTO com o Id: o usuário não vê nem edita, mas ele
+               precisa ser enviado para o Controller saber QUAL registro
+               atualizar (UPDATE Pessoas SET ... WHERE Id = @Id). *@
+            <input type="hidden" asp-for="Id" />
+
+            <div class="mb-3">
+                <label asp-for="Nome" class="form-label"></label>
+                <input asp-for="Nome" class="form-control" />
+                <span asp-validation-for="Nome" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Idade" class="form-label"></label>
+                <input asp-for="Idade" class="form-control" />
+                <span asp-validation-for="Idade" class="text-danger"></span>
+            </div>
+
+            <button type="submit" class="btn btn-warning">Salvar alterações</button>
+            <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

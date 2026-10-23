@@ -1,0 +1,71 @@
+@*
+    =====================================================================
+    VIEW (o "V" do MVC) — Index: LISTAGEM de pessoas (o "R" de Read)
+    ---------------------------------------------------------------------
+    A View é a parte VISUAL: HTML + Razor (código C# começando com @).
+    Ela apenas EXIBE os dados que o Controller enviou — não acessa o banco.
+    =====================================================================
+*@
+
+@* @model define o TIPO de dado que esta View recebe do Controller.
+   Aqui é uma LISTA de pessoas (IEnumerable<Pessoa>). *@
+@model IEnumerable<CrudPessoasAdoNet.Models.Pessoa>
+
+@{
+    // ViewData["Title"] define o título da aba do navegador (usado no _Layout).
+    ViewData["Title"] = "Pessoas";
+}
+
+<h1>Cadastro de Pessoas <small class="text-muted fs-5">(ADO.NET + SqlConnection)</small></h1>
+
+@* Mensagem de sucesso vinda do Controller via TempData (após criar/editar/excluir). *@
+@if (TempData["Mensagem"] != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @TempData["Mensagem"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+    </div>
+}
+
+<p>
+    @* Tag Helper asp-action: gera o link correto para a action Create
+       deste mesmo controller -> href="/Pessoas/Create" *@
+    <a asp-action="Create" class="btn btn-primary">+ Nova Pessoa</a>
+</p>
+
+@* Se a lista estiver vazia, mostramos um aviso em vez da tabela. *@
+@if (!Model.Any())
+{
+    <div class="alert alert-info">Nenhuma pessoa cadastrada ainda.</div>
+}
+else
+{
+    <table class="table table-striped table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                @* DisplayNameFor lê o [Display(Name="...")] definido no Model. *@
+                <th>@Html.DisplayNameFor(model => model.Id)</th>
+                <th>@Html.DisplayNameFor(model => model.Nome)</th>
+                <th>@Html.DisplayNameFor(model => model.Idade)</th>
+                <th class="text-end">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            @* foreach percorre cada pessoa da lista e cria uma linha <tr>. *@
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@item.Nome</td>
+                    <td>@item.Idade</td>
+                    <td class="text-end">
+                        @* asp-route-id passa o Id na URL: /Pessoas/Edit/5 *@
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalhes</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning">Editar</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Excluir</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,39 @@
+@*
+    =====================================================================
+    VIEW — Delete: tela de CONFIRMAÇÃO de exclusão (o "D" de Delete)
+    ---------------------------------------------------------------------
+    Boa prática: nunca excluir direto ao clicar num link (GET).
+    Primeiro mostramos os dados e pedimos confirmação; só o POST exclui.
+    =====================================================================
+*@
+
+@model CrudPessoasAdoNet.Models.Pessoa
+
+@{
+    ViewData["Title"] = "Excluir Pessoa";
+}
+
+<h1>Excluir Pessoa</h1>
+
+<div class="alert alert-danger">
+    <strong>Atenção!</strong> Tem certeza que deseja excluir esta pessoa? Esta ação não pode ser desfeita.
+</div>
+
+<dl class="row">
+    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Id)</dt>
+    <dd class="col-sm-10">@Html.DisplayFor(model => model.Id)</dd>
+
+    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Nome)</dt>
+    <dd class="col-sm-10">@Html.DisplayFor(model => model.Nome)</dd>
+
+    <dt class="col-sm-2">@Html.DisplayNameFor(model => model.Idade)</dt>
+    <dd class="col-sm-10">@Html.DisplayFor(model => model.Idade)</dd>
+</dl>
+
+@* Este formulário envia POST /Pessoas/Delete/{id}, que cai no método
+   DeleteConfirmed do Controller (por causa do [ActionName("Delete")]). *@
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Sim, excluir</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>
